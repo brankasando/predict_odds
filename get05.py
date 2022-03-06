@@ -42,9 +42,10 @@ WebDriverWait(driver, 360).until(EC.element_to_be_clickable((By.LINK_TEXT, "0.5"
 #driver.switch_to.window(window_after)
 
 
-#driver.close()
+driver.close()
 '''
 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
+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
 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
 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
 git remote add origin https://github.com/brankasando/testbsa.git

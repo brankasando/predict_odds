@@ -53,7 +53,7 @@ max_date = cur.execute(''' select max(year_month_day) from results ''')
 # use list() to get the details other than the cursor object.
 # max_date je bio cursor objekat, sa list vraca tuple
 max_date = list(max_date)[0][0]
-
+#print(max_date)
 # ako se skripta za insert izvrsava ujutru na dan x
 # ako se se neka utakmica zavrsila rano na dan x, pre izvrsenja skipta
 # onda ce taj datum uci u bazu i nece uci utakmice odigrane taj dan x, ali kasnije
@@ -65,12 +65,12 @@ for id in ids:
     results = soup.find(id=id)
     t = results.find("div", class_="event__time")
 
-    if t.text[3:5] in ['01', '02']:
-        year_month_day = '2022' + t.text[3:5] + t.text[:2]
-    else:
+    if t.text[3:5] in ['09', '10', '11', '12']:
         year_month_day = '2021' + t.text[3:5] + t.text[:2]
+    else:
+        year_month_day = '2022' + t.text[3:5] + t.text[:2]
     year_month_day = int(year_month_day)
-
+   # print(year_month_day)
     if year_month_day > max_date:
         new_ids.append(id)
 
@@ -95,30 +95,41 @@ print(games_list)
 print(results_home_list)
 print(results_away_list)
 
+
 try:
+
     cur.executemany('''
-    INSERT INTO games (
-            id, sport, league, country, created_at) VALUES 
+    INSERT INTO games 
+        (
+            id, sport, league, country, created_at
+        ) VALUES 
             (?,?,?,?,?)
             ''',
             games_list)
     nb = cur.rowcount
+    cur.execute('''
+                INSERT INTO log_inserted_games 
+                (
+                    created_at, nb_of_lines_inserted, error_message
+                ) VALUES
+                  (?,?,?)
+                   ''',
+                (datetime.datetime.now(), nb, 'successfully inserted'))
+
 
 except Exception as e:
+
     cur.execute('''
-        INSERT INTO log_inserted_games (
-                created_at, nb_of_lines_inserted, error_message) VALUES 
-                (?,?,?)
-                ''',
-                (datetime.datetime.now(), -1, e))
-finally:
-    cur.execute('''
-            INSERT INTO log_inserted_games (
-                    created_at, nb_of_lines_inserted, error_message) VALUES 
-                    (?,?,?)
-                    ''',
-                (datetime.datetime.now(), nb, 'successfully inserted'))
+        INSERT INTO log_inserted_games 
+        (
+            created_at, nb_of_lines_inserted, error_message
+        ) VALUES 
+          (?,?,?)
+          ''',
+          (datetime.datetime.now(), -1, str(e)))
+
 con.commit()
+
 
 try:
     cur.executemany('''
@@ -129,41 +140,37 @@ try:
             results_home_list)
     nb_home = cur.rowcount
 
-
     cur.executemany('''
     INSERT INTO results (
-            game_id, year_month_day, team, goal, is_home, created_at) VALUES 
+            game_id, year_month_day, team, goal, is_home, created_at) VALUES
             (?,?,?,?,?,?)
             ''',
-            results_away_list)
+           results_away_list)
     nb_away = cur.rowcount
 
+    cur.execute('''
+            INSERT INTO log_inserted_results (
+                    created_at, nb_of_lines_inserted, error_message) VALUES
+                    (?,?,?)
+                    ''',
+                (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted'))
 except Exception as e:
     cur.execute('''
         INSERT INTO log_inserted_results (
                 created_at, nb_of_lines_inserted, error_message) VALUES 
                 (?,?,?)
                 ''',
-                (datetime.datetime.now(), -1, e))
-finally:
-    cur.execute('''
-            INSERT INTO log_inserted_results (
-                    created_at, nb_of_lines_inserted, error_message) VALUES 
-                    (?,?,?)
-                    ''',
-                (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted'))
+                (datetime.datetime.now(), -1, str(e)))
+
 con.commit()
-
-
 #print(cur.rowcount)
 
 con.close()
 driver.close()
 
 '''
-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
-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
-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
+bsando
+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
 git remote add origin https://github.com/brankasando/testbsa.git
 
 '''

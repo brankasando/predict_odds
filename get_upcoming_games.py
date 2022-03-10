@@ -121,20 +121,21 @@ try:
                     scheduled_game_away_list)
     nb_away = cur.rowcount
 
-except Exception as e:
-    cur.execute('''
-        INSERT INTO log_inserted_scheduled_games (
-                created_at, nb_of_lines_inserted, error_message) VALUES 
-                (?,?,?)
-                ''',
-                (datetime.datetime.now(), -1, e))
-finally:
     cur.execute('''
             INSERT INTO log_inserted_scheduled_games (
                     created_at, nb_of_lines_inserted, error_message) VALUES 
                     (?,?,?)
                     ''',
                 (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted'))
+
+except Exception as e:
+    cur.execute('''
+        INSERT INTO log_inserted_scheduled_games (
+                created_at, nb_of_lines_inserted, error_message) VALUES 
+                (?,?,?)
+                ''',
+                (datetime.datetime.now(), -1, str(e)))
+
 con.commit()
 con.close()
 

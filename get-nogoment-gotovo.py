@@ -162,9 +162,7 @@ con.commit()
 con.close()
 driver.close()
 '''
-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
-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
-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
+
 git remote add origin https://github.com/brankasando/testbsa.git
 
 '''

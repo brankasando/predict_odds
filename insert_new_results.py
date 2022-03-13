@@ -186,3 +186,22 @@ git remote add origin https://github.com/brankasando/testbsa.git
 
 # da napravim scheduler da okine pajton skripu ujutru i da dopise nove rezultate
 # da kreiram tabelu koja sa raporedom za koju treba da izracunam kvote
+
+''''
+with per_game as (
+        select game_id,
+        sum(goal) as go_ukup
+    from results group by game_id
+)
+select t.team,
+count(*) as br_utak,
+sum(goal) as dato_golova,
+sum(g.go_ukup) -sum(goal) as primljeno_go,
+sum(case
+    when sum(g.go_ukup) > 1 then 1
+    else 0
+end) vise_od_1
+from results t
+inner join  per_game g on t.game_id = g.game_id group by t.team;
+# with per_game as (select game_id,sum(goal) as go_ukup from results group by game_id) select t.team, count(*) as br_utak, sum(goal) as dato_golova, sum(g.go_ukup) -sum(goal) as primljeno_go, sum(case when sum(g.go_ukup) > 1 then 1 else 0 end) vise_od_1 from results t inner join  per_game g on t.game_id = g.game_id group by t.team;
+'''

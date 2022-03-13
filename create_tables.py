@@ -13,6 +13,7 @@ cur.execute('''CREATE TABLE scheduled_games
                year_month_day int,
                team text,
                is_home int,
+               is_current int,
                created_at timestamp,
                
                constraint pk_scheduled_games primary key (id, is_home)

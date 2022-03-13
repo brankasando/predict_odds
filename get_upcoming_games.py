@@ -93,9 +93,9 @@ for id in new_ids:
     year_month_day = int('2022' + year_month_day_time.text[3:5] + year_month_day_time.text[:2])
 
     scheduled_game_home_list.append(
-        (id, 'Hokey', 'DEL', 'Germany', year_month_day, team_home.text, 1, datetime.datetime.now()))
+        (id, 'Hokey', 'DEL', 'Germany', year_month_day, team_home.text, 1, 1, datetime.datetime.now()))
     scheduled_game_away_list.append(
-        (id, 'Hokey', 'DEL', 'Germany', year_month_day, team_away.text, 0, datetime.datetime.now()))
+        (id, 'Hokey', 'DEL', 'Germany', year_month_day, team_away.text, 0, 1, datetime.datetime.now()))
 
 # print(games_list)
 # print(results_home_list)
@@ -105,18 +105,21 @@ con = sqlite3.connect('bets.db')
 cur = con.cursor()
 
 try:
+
+    cur.execute("update scheduled_games set is_current = 0")
+
     cur.executemany('''
     INSERT INTO scheduled_games (
-            id, sport, league, country, year_month_day, team, is_home, created_at) VALUES 
-            (?,?,?,?,?,?,?,?)
+            id, sport, league, country, year_month_day, team, is_home, is_current, created_at) VALUES 
+            (?,?,?,?,?,?,?,?,?)
             ''',
                     scheduled_game_home_list)
     nb_home = cur.rowcount
 
     cur.executemany('''
     INSERT INTO scheduled_games (
-            id, sport, league, country, year_month_day, team, is_home, created_at) VALUES 
-            (?,?,?,?,?,?,?,?)
+            id, sport, league, country, year_month_day, team, is_home, is_current, created_at) VALUES 
+            (?,?,?,?,?,?,?,?,?)
             ''',
                     scheduled_game_away_list)
     nb_away = cur.rowcount

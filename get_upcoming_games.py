@@ -6,7 +6,9 @@
 # Tako da ce u bazi biti i kvote koje su neupotrebljive, kao i za utakmice koje su odlozene
 # Ali nema veze, to je bilo stanje kvote na taj dan, sa trenutnim stanjem
 # Kada budem radila poredjenje sa stvarnim rezultatom mogu da join-ujem po datumu
-
+# postoji kolona is_active koja se setuje na 0 pre svakog novog importa
+# i novi import dobija vrednost is_active,
+# samo se za aktivne redove racunaju predikcije
 
 from time import sleep
 

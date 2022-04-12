@@ -7,9 +7,12 @@ cur = con.cursor()
 cur.execute(
     '''
 with per_game as (
-        select game_id,
-        sum(goal - is_winner*is_extra_time) as goal_all
-    from results group by game_id
+        select r.game_id,
+        sum(r.goal - r.is_winner * r.is_extra_time) as goal_all
+    from results r
+    inner join games g on r.game_id = g.id
+    where g.country = 'norveska'
+    group by game_id
 )
 select t.team,
 count(*) as all_nb_games,
@@ -46,7 +49,8 @@ sum(case when g.goal_all > 7.5 and is_home = 0 then 1 else 0 end) over_away_7_5,
 sum(case when g.goal_all > 8.5 and is_home = 0 then 1 else 0 end) over_away_8_5
 
 from results t
-inner join  per_game g on t.game_id = g.game_id group by t.team;
+inner join  per_game g on t.game_id = g.game_id group by t.team
+;
     '''
 )
 

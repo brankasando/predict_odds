@@ -188,7 +188,7 @@ def insert_new_results(website_url):
 
     '''
     bsando
-    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
+    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
     git remote add origin https://github.com/brankasando/testbsa.git
 
     '''

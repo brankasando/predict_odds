@@ -33,6 +33,7 @@ fixed_goal as (
 goals_per_team as (
 select 
     team, 
+    is_home,
     count(*)                                                  as nb_games_all, 
     sum(case when is_home = 1 then 1 else 0 end)              as nb_games_home,
     sum(case when is_home = 0 then 1 else 0 end)              as nb_games_away,
@@ -176,34 +177,65 @@ group by team
 
 union_over as (
  
-select * from over_0_5 where team = 'Brann'
+select * from over_0_5 
 union all
-select * from over_1_5 where team = 'Brann'
+select * from over_1_5 
 union all
-select * from over_2_5 where team = 'Brann'
+select * from over_2_5 
 union all
-select * from over_3_5 where team = 'Brann'
+select * from over_3_5 
 union all
-select * from over_4_5 where team = 'Brann'
+select * from over_4_5 
 union all
-select * from over_5_5 where team = 'Brann'
+select * from over_5_5 
 union all
-select * from over_6_5 where team = 'Brann'
+select * from over_6_5
 union all
-select * from over_7_5 where team = 'Brann'
+select * from over_7_5 
 union all
-select * from over_8_5 where team = 'Brann'
-)
+select * from over_8_5 
+),
 
+all_statistics as (
 select 
-    sg.game_id, 
+    sg.id, 
     sg.year_month_day,
     sg.team, 
+    sg.is_home,
+    gpt.nb_games_all,
+    gpt.nb_games_home,
+    gpt.nb_games_away,
+    gpt.nb_goals_all_per_game,
+    gpt.nb_goals_all_plus,
+    gpt.nb_goals_all_minus,
+    gpt.nb_goals_home_plus,
+    gpt.nb_goals_home_minus,
+    gpt.nb_goals_away_plus,
+    gpt.nb_goals_away_plus,
+    uo.over,
+    uo.nb_games_over_all,
+    uo.nb_games_over_home,
+    uo.nb_games_over_away,
+    uo.nb_games_over_all_last_6
 from 
 scheduled_games sg
 inner join goals_per_team gpt on gpt.team = sg.team 
-where sq.is_current = 1
+inner join union_over uo on uo.team = sg.team
+where sg.is_current = 1
+)
 
+select
+    id as game_id, 
+    over, 
+    year_month_day,
+    max(case when is_home = 1 then team end) as team_home, 
+    max(case when is_home = 0 then team end) as team_away, 
+    --max(case when is_home = 1 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as p1,
+    --max(case when is_home = 0 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as prediction_1,
+    avg(nb_games_over_all*1.0000/nb_games_all + is_home*nb_games_over_home*1.00000/nb_games_home + iif(is_home=0,1,0)*nb_games_over_away*1.00000*nb_games_away) as p1
+from
+all_statistics
+group by id, over
 
 
 '''

@@ -41,8 +41,10 @@ cur.execute('''CREATE TABLE results
                team text not null,
                goal int not null,
                is_home bit not null,
+               
                is_winner bit not null,
                is_extra_time bit null,
+               
                created_at timestamp not null,
 
                constraint pk_results_year_month_day_team primary key (year_month_day, team),

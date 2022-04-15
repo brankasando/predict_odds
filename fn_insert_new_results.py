@@ -92,13 +92,24 @@ def insert_new_results(website_url):
         team_home = results.find("div", class_=lambda s: "event__participant event__participant--home" in s)
         team_away = results.find("div", class_=lambda s: "event__participant event__participant--away" in s)
         goal_home = results.find("div", class_="event__score event__score--home")
+        goal_home_int = int(goal_home.text)
         goal_away = results.find("div", class_="event__score event__score--away")
+        goal_away_int = int(goal_away.text)
         year_month_day_time = results.find("div", class_="event__time")
-        year_month_day = int('2022' + year_month_day_time.text[3:5] + year_month_day_time.text[:2])
-        #                       sport  league  country
+        extra_time = results.find("div", class_="event__stage--block")
+        extra_time_bit = 0 if extra_time is None else 1
+
+        if year_month_day_time.text[3:5] in ['09', '10', '11', '12']:
+            year_month_day = '2021' + year_month_day_time.text[3:5] + year_month_day_time.text[:2]
+        else:
+            year_month_day = '2022' + year_month_day_time.text[3:5] + year_month_day_time.text[:2]
+        year_month_day = int(year_month_day)
+                                #sport                  league                  country
         games_list.append((id, website_url_elements[3], website_url_elements[5], website_url_elements[4], datetime.datetime.now()))
-        results_home_list.append((id, year_month_day, team_home.text, int(goal_home.text), 1, datetime.datetime.now()))
-        results_away_list.append((id, year_month_day, team_away.text, int(goal_away.text), 0, datetime.datetime.now()))
+        results_home_list.append((id, year_month_day, team_home.text, goal_home_int, 1,
+                                  1 if goal_home_int > goal_away_int else 0, extra_time_bit, datetime.datetime.now()))
+        results_away_list.append((id, year_month_day, team_away.text, goal_away_int, 0,
+                                  1 if goal_home_int < goal_away_int else 0, extra_time_bit, datetime.datetime.now()))
 
     #print(games_list)
     #print(results_home_list)
@@ -141,18 +152,18 @@ def insert_new_results(website_url):
     try:
         cur.executemany('''
         INSERT INTO results (
-                game_id, year_month_day, team, goal, is_home, created_at) VALUES 
-                (?,?,?,?,?,?)
+                game_id, year_month_day, team, goal, is_home, is_winner, is_extra_time, created_at) VALUES 
+                (?,?,?,?,?,?,?,?)
                 ''',
-                        results_home_list)
+                results_home_list)
         nb_home = cur.rowcount
 
         cur.executemany('''
         INSERT INTO results (
-                game_id, year_month_day, team, goal, is_home, created_at) VALUES
-                (?,?,?,?,?,?)
+                game_id, year_month_day, team, goal, is_home, is_winner, is_extra_time, created_at) VALUES
+                (?,?,?,?,?,?,?,?)
                 ''',
-                        results_away_list)
+                results_away_list)
         nb_away = cur.rowcount
 
         cur.execute('''

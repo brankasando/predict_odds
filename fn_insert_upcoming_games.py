@@ -64,13 +64,13 @@ def insert_upcoming_games(website_url):
         current_date = (current_day, current_month)
         upcoming_days.append(current_date)
 
-        next_day = (datetime.datetime.now() + datetime.timedelta(days=1)).day
-        next_month = (datetime.datetime.now() + datetime.timedelta(days=1)).month
+        next_day = (datetime.datetime.now() + datetime.timedelta(days=3)).day
+        next_month = (datetime.datetime.now() + datetime.timedelta(days=3)).month
         next_date = (next_day, next_month)
         upcoming_days.append(next_date)
 
-        next_next_day = (datetime.datetime.now() + datetime.timedelta(days=2)).day
-        next_next_month = (datetime.datetime.now() + datetime.timedelta(days=2)).month
+        next_next_day = (datetime.datetime.now() + datetime.timedelta(days=4)).day
+        next_next_month = (datetime.datetime.now() + datetime.timedelta(days=4)).month
         next_next_date = (next_next_day, next_next_month)
         upcoming_days.append(next_next_date)
 

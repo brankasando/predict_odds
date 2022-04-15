@@ -1,0 +1,5 @@
+,game_id,year_month_day,team,goal,is_home,is_winner,is_extra_time,created_at,game_id,goals_all_per_game,goal_fixed
+0,g_1_W6PaXzz5,20220409,Brann,1,1,0,0,2022-04-11 13:34:00.718889,g_1_W6PaXzz5,1,1
+1,g_1_EVhZGFkO,20220403,Ranheim,0,1,0,0,2022-04-11 13:34:00.779442,g_1_EVhZGFkO,4,4
+2,g_1_W6PaXzz5,20220409,Åsane,1,0,0,0,2022-04-11 13:34:00.718898,g_1_W6PaXzz5,1,1
+3,g_1_EVhZGFkO,20220403,Brann,4,0,1,0,2022-04-11 13:34:00.779451,g_1_EVhZGFkO,4,4

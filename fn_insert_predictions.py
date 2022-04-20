@@ -227,15 +227,23 @@ where sg.is_current = 1
 select
     id as game_id, 
     over, 
-    year_month_day,
+   -- year_month_day,
     max(case when is_home = 1 then team end) as team_home, 
     max(case when is_home = 0 then team end) as team_away, 
     --max(case when is_home = 1 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as p1,
     --max(case when is_home = 0 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as prediction_1,
-    avg(nb_games_over_all*1.0000/nb_games_all + is_home*nb_games_over_home*1.00000/nb_games_home + iif(is_home=0,1,0)*nb_games_over_away*1.00000*nb_games_away) as p1
+    ((sum((1.00000*nb_games_over_all/nb_games_all)*100)/2) +
+    ((sum(iif(is_home = 1, (1.00000*nb_games_over_home/nb_games_home)*100,0)) +
+    sum(iif(is_home = 0, (1.00000*nb_games_over_away/nb_games_away)*100,0)))/2))/2 as formula,
+    100 /  (((sum((1.00000*nb_games_over_all/nb_games_all)*100)/2) +
+    ((sum(iif(is_home = 1, (1.00000*nb_games_over_home/nb_games_home)*100,0)) +
+    sum(iif(is_home = 0, (1.00000*nb_games_over_away/nb_games_away)*100,0)))/2))/2) as kvota
+
+   -- 100 / (sum(nb_games_over_all/nb_games_all + is_home*nb_games_over_home*1.00000/nb_games_home + iif(is_home=0,1,0)*nb_games_over_away*1.00000*nb_games_away)/4 ) as kvota_1
 from
 all_statistics
 group by id, over
+order by team_home
 
 
 '''

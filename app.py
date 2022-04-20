@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-
+import pandas as pd
 import sqlite3
 
 
@@ -10,15 +10,21 @@ class MyServer(BaseHTTPRequestHandler):
         con = sqlite3.connect('bets.db')
         cur = con.cursor()
 
-        cur.execute(
-            '''
+
+        q =  '''
             select * from scheduled_games order by id
             '''
-        )
 
-        records = cur.fetchall()
 
-        print("Total rows are:  ", len(records))
+        #records = cur.fetchall()
+
+        db_df = pd.read_sql_query(q, con)
+        df_html = db_df.to_html()
+        print(df_html)
+        # print("Total rows are:  ", len(records))
+
+        cur.close()
+        con.close()
 
 
 
@@ -28,14 +34,10 @@ class MyServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes("<html><head><title>Simple Server</title></head>", "utf-8"))
         self.wfile.write(bytes("<body>", "utf-8"))
 
-        for index, row in enumerate(records):
-            print(index)
-
-            self.wfile.write(bytes(row[5], "utf-8"))
-            self.wfile.write(bytes("<br>", "utf-8"))
-
-        cur.close()
-        con.close()
+        #for index, row in enumerate(records):
+           # self.wfile.write(bytes(row[5], "utf-8"))
+           # self.wfile.write(bytes("<br>", "utf-8"))
+        self.wfile.write(bytes(df_html, "utf-8"))
 
         self.wfile.write(bytes("<p>Dembeli rezultati///.</p>", "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))

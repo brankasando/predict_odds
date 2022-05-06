@@ -12,7 +12,7 @@ with per_game as (
         sum(r.goal - r.is_winner * r.is_extra_time) as goals_all_per_game
     from results r
     inner join games g on r.game_id = g.id
-    where g.country = 'norveska' 
+   /* where g.country = 'norveska' */
     group by game_id
 ), 
 
@@ -50,7 +50,6 @@ select
     sum(case when is_home = 0 then goals_all_per_game else 0 end) - sum(case when is_home = 0 then nb_goals_fixed else 0 end) as nb_goals_away_minus /* how many goals team receives as away*/
 from 
 fixed_goal
-/*where team = 'Sandnes'*/
 group by team
 ),
 
@@ -61,7 +60,8 @@ select
     sum(case when goals_all_per_game > 0.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 0.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 0.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 0.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 0.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 0.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -74,7 +74,8 @@ select
     sum(case when goals_all_per_game > 1.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 1.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 1.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 1.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 1.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 1.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -87,7 +88,8 @@ select
     sum(case when goals_all_per_game > 2.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 2.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 2.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 2.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 2.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 2.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -100,7 +102,8 @@ select
     sum(case when goals_all_per_game > 3.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 3.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 3.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 3.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 3.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 3.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -114,7 +117,8 @@ select
     sum(case when goals_all_per_game > 4.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 4.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 4.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 4.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 4.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 4.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -128,7 +132,8 @@ select
     sum(case when goals_all_per_game > 5.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 5.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 5.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 5.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 5.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 5.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -142,7 +147,8 @@ select
     sum(case when goals_all_per_game > 6.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 6.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 6.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 6.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 6.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 6.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -156,7 +162,8 @@ select
     sum(case when goals_all_per_game > 7.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 7.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 7.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 7.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 7.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 7.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -169,7 +176,8 @@ select
     sum(case when goals_all_per_game > 8.5 then 1 else 0 end)                        as nb_games_over_all,
     sum(case when goals_all_per_game > 8.5 and is_home = 1 then 1 else 0 end)        as nb_games_over_home,
     sum(case when goals_all_per_game > 8.5 and is_home = 0 then 1 else 0 end)        as nb_games_over_away,
-    case when goals_all_per_game     > 8.5 and rn <= 6 then 1 else 0 end             as nb_games_over_all_last_6 /*dao golova ili je dato golova?*/
+    sum(case when goals_all_per_game > 8.5 and rn <= 6 then 1 else 0 end)            as nb_games_over_all_last_6, /*dato golova na utakmici*/
+    sum(case when goals_all_per_game > 8.5 and rn <= 5 then 1 else 0 end)            as nb_games_over_all_last_5 /*dato golova na utakmici*/
 from 
 fixed_goal
 group by team
@@ -211,11 +219,12 @@ select
     gpt.nb_goals_home_plus,
     gpt.nb_goals_home_minus,
     gpt.nb_goals_away_plus,
-    gpt.nb_goals_away_plus,
+    gpt.nb_goals_away_minus,
     uo.over,
     uo.nb_games_over_all,
     uo.nb_games_over_home,
     uo.nb_games_over_away,
+    uo.nb_games_over_all_last_5,
     uo.nb_games_over_all_last_6
 from 
 scheduled_games sg
@@ -227,19 +236,46 @@ where sg.is_current = 1
 select
     id as game_id, 
     over, 
-   -- year_month_day,
     max(case when is_home = 1 then team end) as team_home, 
     max(case when is_home = 0 then team end) as team_away, 
-    --max(case when is_home = 1 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as p1,
-    --max(case when is_home = 0 then nb_games_over_all end)*1.00000/max(case when is_home = 1 then nb_games_all end) as prediction_1,
-    ((sum((1.00000*nb_games_over_all/nb_games_all)*100)/2) +
-    ((sum(iif(is_home = 1, (1.00000*nb_games_over_home/nb_games_home)*100,0)) +
-    sum(iif(is_home = 0, (1.00000*nb_games_over_away/nb_games_away)*100,0)))/2))/2 as formula,
-    100 /  (((sum((1.00000*nb_games_over_all/nb_games_all)*100)/2) +
-    ((sum(iif(is_home = 1, (1.00000*nb_games_over_home/nb_games_home)*100,0)) +
-    sum(iif(is_home = 0, (1.00000*nb_games_over_away/nb_games_away)*100,0)))/2))/2) as kvota
+    
+    /*100/((sum(1.00000*nb_games_over_all/nb_games_all) +
+    sum(iif(is_home = 1, 1.00000*nb_games_over_home/nb_games_home,0)) +
+    sum(iif(is_home = 0, 1.00000*nb_games_over_away/nb_games_away,0)) + 
+    sum(1.00000*nb_games_over_all_last_5/5))*100/6) as odds_last_5,*/
 
-   -- 100 / (sum(nb_games_over_all/nb_games_all + is_home*nb_games_over_home*1.00000/nb_games_home + iif(is_home=0,1,0)*nb_games_over_away*1.00000*nb_games_away)/4 ) as kvota_1
+    100/((sum(1.00000*nb_games_over_all/nb_games_all) +
+    sum(iif(is_home = 1, 1.00000*nb_games_over_home/nb_games_home,0)) +
+    sum(iif(is_home = 0, 1.00000*nb_games_over_away/nb_games_away,0)) + 
+    sum(1.00000*nb_games_over_all_last_6/6))*100/6) as odds_last_6,
+    
+    sum(1.00000*nb_games_over_all/nb_games_all) as s12,
+    sum(iif(is_home = 1, 1.00000*nb_games_over_home/nb_games_home,0)) as s3,
+    sum(iif(is_home = 1, nb_games_home,0)) as s3_nb_games_home,
+    sum(iif(is_home = 1, nb_games_over_home,0)) as s3_nb_games_home_over,
+
+    sum(iif(is_home = 0, 1.00000*nb_games_over_away/nb_games_away,0)) as s4, 
+   --sum(1.00000*nb_games_over_all_last_5/5) as s5,
+    sum(1.00000*nb_games_over_all_last_6/6) as s56,
+    
+    (sum(iif(is_home = 1, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_home_plus/nb_games_home, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_home_minus/nb_games_home, 0)))/4 as avg_goal_home,
+
+    (sum(iif(is_home = 0, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_away_plus/nb_games_away, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_away_minus/nb_games_away, 0)))/4 as avg_goal_away,
+    
+    (sum(iif(is_home = 1, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_home_plus/nb_games_home, 0)) +
+    sum(iif(is_home = 1, 1.00000*nb_goals_home_minus/nb_games_home, 0)) + 
+    sum(iif(is_home = 0, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_away_plus/nb_games_away, 0)) +
+    sum(iif(is_home = 0, 1.00000*nb_goals_away_minus/nb_games_away, 0)))/8 as avg_goal
 from
 all_statistics
 group by id, over

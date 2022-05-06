@@ -34,9 +34,9 @@ def insert_base_results(website_url):
     # mainWindowHandle = driver.getWindowHandle()
     # mainWindowHandle = driver.window_handles
 
-    #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
-    #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
-    #WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    WebDriverWait(driver, 50).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
 
 
     soup = BeautifulSoup(driver.page_source, "html")
@@ -72,7 +72,7 @@ def insert_base_results(website_url):
         extra_time = results.find("div", class_="event__stage--block")
         extra_time_bit = 0 if extra_time is None else 1
 
-        if year_month_day_time.text[3:5] in ['09', '10', '11', '12']:
+        if year_month_day_time.text[3:5] in ['08','09', '10', '11', '12']:
             year_month_day = '2021' + year_month_day_time.text[3:5] + year_month_day_time.text[:2]
         else:
             year_month_day = '2022' + year_month_day_time.text[3:5] + year_month_day_time.text[:2]

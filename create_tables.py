@@ -5,7 +5,7 @@ cur = con.cursor()
 
 
 cur.execute('''CREATE TABLE scheduled_games
-             (  
+             (
                id text not null,
                sport text not null,
                league text not null,
@@ -15,12 +15,12 @@ cur.execute('''CREATE TABLE scheduled_games
                is_home bit not null,
                is_current bit not null,
                created_at timestamp not null,
-               
+
                constraint pk_scheduled_games primary key (id, is_home)
               )''')
 
-# sqlite allows primary key column to contain NULL values
-# Create table
+#sqlite allows primary key column to contain NULL values
+#Create table
 
 
 cur.execute('''CREATE TABLE games
@@ -29,22 +29,25 @@ cur.execute('''CREATE TABLE games
                sport text not null,
                league text not null,
                country text not null,
+               season_year text not null,
+               is_season_active bit not null default 1,
                created_at timestamp not null,
+
 
                constraint pk_games_id primary key (id)
               )''')
 
 cur.execute('''CREATE TABLE results
-             (  
+             (
                game_id text not null,
                year_month_day int not null,
                team text not null,
                goal int not null,
                is_home bit not null,
-               
+
                is_winner bit not null,
                is_extra_time bit null,
-               
+
                created_at timestamp not null,
 
                constraint pk_results_year_month_day_team primary key (year_month_day, team),

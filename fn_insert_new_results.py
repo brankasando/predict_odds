@@ -37,6 +37,10 @@ def insert_new_results(website_url):
 
     soup = BeautifulSoup(driver.page_source, "html")
     soup = BeautifulSoup(driver.page_source, features="html.parser")
+
+
+    season_year_txt = soup.find("div", class_="heading__info").text
+
     div_tags = soup.find_all('div')
     ids = []
     # uzmi samo id-eve koje se odnose na utakmice
@@ -105,7 +109,8 @@ def insert_new_results(website_url):
             year_month_day = '2022' + year_month_day_time.text[3:5] + year_month_day_time.text[:2]
         year_month_day = int(year_month_day)
                                 #sport                  league                  country
-        games_list.append((id, website_url_elements[3], website_url_elements[5], website_url_elements[4], datetime.datetime.now()))
+        games_list.append((id, website_url_elements[3], website_url_elements[5], website_url_elements[4], season_year_txt, 1, datetime.datetime.now()))
+
         results_home_list.append((id, year_month_day, team_home.text, goal_home_int, 1,
                                   1 if goal_home_int > goal_away_int else 0, extra_time_bit, datetime.datetime.now()))
         results_away_list.append((id, year_month_day, team_away.text, goal_away_int, 0,
@@ -120,20 +125,20 @@ def insert_new_results(website_url):
         cur.executemany('''
         INSERT INTO games 
             (
-                id, sport, league, country, created_at
+                id, sport, league, country, season_year, is_season_active, created_at
             ) VALUES 
-                (?,?,?,?,?)
+                (?,?,?,?,?,?,?)
                 ''',
                         games_list)
         nb = cur.rowcount
         cur.execute('''
                     INSERT INTO log_inserted_games 
                     (
-                        created_at, nb_of_lines_inserted, error_message
+                        created_at, nb_of_lines_inserted, error_message, inserted_by
                     ) VALUES
-                      (?,?,?)
+                      (?,?,?,?)
                        ''',
-                    (datetime.datetime.now(), nb, 'successfully inserted'))
+                    (datetime.datetime.now(), nb, 'successfully inserted', 'fn_insert_new_results'))
 
 
     except Exception as e:
@@ -141,11 +146,11 @@ def insert_new_results(website_url):
         cur.execute('''
             INSERT INTO log_inserted_games 
             (
-                created_at, nb_of_lines_inserted, error_message
+                created_at, nb_of_lines_inserted, error_message, inserted_by
             ) VALUES 
-              (?,?,?)
+              (?,?,?,?)
               ''',
-                    (datetime.datetime.now(), -1, str(e)))
+                    (datetime.datetime.now(), -1, str(e), 'fn_insert_new_results'))
 
     con.commit()
 
@@ -168,17 +173,17 @@ def insert_new_results(website_url):
 
         cur.execute('''
                 INSERT INTO log_inserted_results (
-                        created_at, nb_of_lines_inserted, error_message) VALUES
-                        (?,?,?)
+                        created_at, nb_of_lines_inserted, error_message, inserted_by) VALUES
+                        (?,?,?,?)
                         ''',
-                    (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted'))
+                    (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted', 'fn_insert_new_results'))
     except Exception as e:
         cur.execute('''
             INSERT INTO log_inserted_results (
-                    created_at, nb_of_lines_inserted, error_message) VALUES 
-                    (?,?,?)
+                    created_at, nb_of_lines_inserted, error_message, inserted_by) VALUES 
+                    (?,?,?,?)
                     ''',
-                    (datetime.datetime.now(), -1, str(e)))
+                    (datetime.datetime.now(), -1, str(e), 'fn_insert_new_results'))
 
     con.commit()
     # print(cur.rowcount)

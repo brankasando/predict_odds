@@ -3,7 +3,7 @@
 # izracunaj kvotu i upisi u tabelu
 # ako danas igra jedna tim i sutra isto, kvota ne bi trebalo da se racuna za drugu
 # ali cu izracunati, da ne komplikujem
-# Tako da ce u bazi biti i kvote koje su neupotrebljive, kao i za utakmice koje su odlozene
+# Tako da ce u bazi biti i kvote koje su neupotrebljive.
 # Ali nema veze, to je bilo stanje kvote na taj dan, sa trenutnim stanjem
 # Kada budem radila poredjenje sa stvarnim rezultatom mogu da join-ujem po datumu
 # postoji kolona is_active koja se setuje na 0 pre svakog novog importa
@@ -132,18 +132,18 @@ def insert_upcoming_games(website_url):
 
         cur.execute('''
                 INSERT INTO log_inserted_scheduled_games (
-                        created_at, nb_of_lines_inserted, error_message) VALUES 
-                        (?,?,?)
+                        created_at, nb_of_lines_inserted, error_message, inserted_by) VALUES 
+                        (?,?,?,?)
                         ''',
-                    (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted'))
+                    (datetime.datetime.now(), nb_home + nb_away, 'successfully inserted', 'fn_insert_upcoming_games'))
 
     except Exception as e:
         cur.execute('''
             INSERT INTO log_inserted_scheduled_games (
-                    created_at, nb_of_lines_inserted, error_message) VALUES 
-                    (?,?,?)
+                    created_at, nb_of_lines_inserted, error_message, inserted_by) VALUES 
+                    (?,?,?,?)
                     ''',
-                    (datetime.datetime.now(), -1, str(e)))
+                    (datetime.datetime.now(), -1, str(e), 'fn_insert_upcoming_games'))
 
     con.commit()
     con.close()

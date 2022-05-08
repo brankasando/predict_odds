@@ -24,7 +24,7 @@ cur.execute('''CREATE TABLE scheduled_games
 
 
 cur.execute('''CREATE TABLE games
-             (  
+             (
                id text not null,
                sport text not null,
                league text not null,
@@ -54,6 +54,24 @@ cur.execute('''CREATE TABLE results
                constraint fk_results_game_id foreign key (game_id) references games (id)
               )''')
 
+
+
+cur.execute('''CREATE TABLE predictions
+             (
+               game_id text not null,
+               year_month_day int not null,
+               over float not null,
+               team_home text not null,
+               team_away text not null,
+               odds_last_6 float, 
+               avg_goal_team_home float not null, 
+               avg_goal_team_away float not null, 
+               avg_goal float not null, 
+               is_current bit not null,
+               created_at timestamp not null,
+
+               constraint fk_predictions_game_id foreign key (game_id) references games (id)
+              )''')
 
 
 con.commit()

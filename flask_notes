@@ -1,0 +1,46 @@
+pip3 install flask-sqlachemy (drugi lik je instalio sa flask samo)
+
+
+/*SQLAlchemy is a library that facilitates the communication between Python programs and databases. Most of the times, this library is used as an Object Relational Mapper (ORM) tool that translates Python classes to tables on relational databases and automatically converts function calls to SQL statements.
+*/
+
+from flask import Flask
+
+app = Flask(__name__) - pravi aplikaciju
+
+@app.route('/') - na ovom url ce se primeniti prva funkcija ispod na koju naidje
+def index():
+    return "Hello world"
+
+
+if __name__ == "__main__": - ako se pokrene iz komande linije da ispise gresku
+    app.run(debug=True)
+------------------------------------------------------------------------------------
+- pravi se app.py - to je pajton fajl gde definisemo sta ce biti vidljivo na kojoj adresi
+i referenciramo na html fajlove koje ce se renderovati za prikaz
+- pravimo html fajlove i koristimo jinja2 sitaksu (template engine - omogucava da se u html-u 'programira' - da pisemo petlje i slicno)
+- mogu da se proslede parametri iz app.py u html script (npr prosledili smo listu dictionary-ija)
+
+BAZA
+-----
+
+Flask ne dolazi sa bazom ukljucenom (kao Djano) jer zele bude lightweight.
+Postoji library sqlalchemy, omogucava da komuniciramo sa bazom iz aplikacija kao sto je Flaks.
+Instaliramo sa pip install flask-sqlachemy
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///post.db'- gde ce baza biti storovana, radimo to kroz konfiguraciju, i u polje 
+u konfig fajlu SQLALCHEMY_DATABASE_URI upisujemo path gde je baza storovana
+
+db = SQLAlchemy(app) - kreiramo bazu i flask app i baza su sada linkovani zajedno
+
+model view controller - struktura za web development 
+
+svaka class-a je piece of data u bazi
+
+- da bi se kreirala baza pomocu koda u app.py idemo u terminal:
+idemo u python env: from app import db
+db.create_all() 
+from app import BlogPost
+BlogPost.query.all() - ispisi sve iz baze
+db.session.add(BlogPost(title='Blog Post 1', contenct='Content of Blog post1', author='Aaron'))
+

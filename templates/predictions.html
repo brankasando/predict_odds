@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>predictions</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <form method="GET" action="/predictions">
+
+        <div class="form-group">
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label><h6>Choose sport:</h6></label>
+                    <select name="sport" id="sport" class="form-control">
+                        {% for item in ddl_sport %}
+                        <option value="{{ item[0] }}"   {% if item[0] == sport_value %} selected {% endif %}>
+                            <!-- itemp[0] je prvi clan tupple-a, jer je item tupple, pa zato to uzimam kao vrednost-->
+                            {{ item[0] }}</option>
+                        {% endfor %}
+                        <br>
+                    </select>
+                </div>
+                <br>
+                <div class="col">
+                    <label><h6>Choose league:</h6></label>
+                    <select name="league" id="league" class="form-control">
+                        {% for item in ddl_league %}
+                        <option value="{{ item[0] }}"   {% if item[0] == league_value %} selected {% endif %}>
+                            <!-- itemp[0] je prvi clan tupple-a, jer je item tupple, pa zato to uzimam kao vrednost-->
+                            {{ item[0] }}</option>
+                        {% endfor %}
+                        <br>
+                    </select>
+                </div>
+
+                <div class="col">
+                    <label><h6>Choose country:</h6></label>
+                    <select name="country" id="country" class="form-control">
+                        {% for item in ddl_country %}
+                        <option value="{{ item[0] }}"   {% if item[0] == country_value %} selected {% endif %}>
+                            <!-- itemp[0] je prvi clan tupple-a, jer je item tupple, pa zato to uzimam kao vrednost-->
+                            {{ item[0] }}</option>
+                        {% endfor %}
+                        <br>
+                    </select>
+                </div>
+
+                <div class="col">
+                    <label class="text-white">Choose filter</label>
+                    <br>
+                    <button type="submit" class="btn mt-1" style="background-color:#BBAAB8;color:white;">FILTER</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </form>
+
+
+    <style>
+#predictions_table {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#predictions_table td, #predictions_table th {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+#predictions_table tr:nth-child(even){background-color: #f2f2f2;}
+
+#predictions_table tr:hover {background-color: #ddd;}
+
+#predictions_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #6F6869;
+  color: white;
+}
+</style>
+    <br>
+    <h3>Predictions:</h3>
+    <table class="table text-center"; id = "predictions_table" border="1" class="dataframe">
+        <thead style="font-size:13px";>
+        <tr>
+            <th>SPORT</th>
+            <th>LEAGUE</th>
+            <th>COUNTRY</th>
+            <th>DATE</th>
+            <th>OVER</th>
+            <th>TEAM HOME</th>
+            <th>TEAM AWAY</th>
+            <th>ODDS (with form of last 6)</th>
+            <th>AVERAGE GOAL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[3]}}</td>
+            <td>{{row[4]}}</td>
+            <td>{{row[5]}}</td>
+            <td>{{row[6]}}</td>
+            <td>{{row[7]}}</td>
+            <td>{{row[8]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% endblock %}
+
+
+
+
+</div>

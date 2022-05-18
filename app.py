@@ -5,11 +5,14 @@ import sqlite3
 
 app = Flask(__name__) #zovemo flask konsturktor, ovo __name__ referencuje ovaj fajl
 
+@app.route('/')
+def hello():
+    return('hello')
 
 @app.route('/predictions', methods=['GET','POST'])
 def show_predicions():
 
-    con = sqlite3.connect('/home/branka/web_sracp2/bets.db')
+    con = sqlite3.connect('bets.db')
     cur = con.cursor()
 
     # uzmi sport
@@ -119,6 +122,9 @@ def show_predicions():
             country_value=country_value
         )
 
+if __name__ == '__main__':
+      app.run(host='0.0.0.0', port=80)
 
-if __name__ == "__main__":
-    app.run(debug=True) #ako zovemo program iz komande linije da ukljuci debug mode
+
+#if __name__ == "__main__":
+ #   app.run(debug=True) #ako zovemo program iz komande linije da ukljuci debug mode

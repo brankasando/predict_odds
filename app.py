@@ -81,10 +81,10 @@ def show_predicions():
 
     cur.execute(
         '''
-        select  
-            g.sport as sport, 
-            g.league as league,
-            g.country as country,
+        select distinct
+            sg.sport as sport, 
+            sg.league as league,
+            sg.country as country,
             p.year_month_day as year_month_day, 
             p.over as over, 
             p.team_home as team_home,
@@ -92,18 +92,20 @@ def show_predicions():
             round(p.odds_last_6, 5) as odds_last_6,
             round(p.avg_goal, 5) as avg_goal   
         from 
-        games g
-        inner join predictions p on p.game_id = g.id
+        scheduled_games sg
+        inner join predictions p on p.game_id = sg.id and sg.is_current = 1
         where 
-        (g.sport = ? or 'All' = ?) and
-        (g.league = ? or 'All' = ?) and
-        (g.country = ? or 'All' = ?) and
+        p.is_current = 1 and
+        (sg.sport = ? or 'All' = ?) and
+        (sg.league = ? or 'All' = ?) and
+        (sg.country = ? or 'All' = ?) and
         (p.over in {}) and
-        odds_last_6 is not null
+        p.odds_last_6 is not null
         order by 
-            g.sport,
-            g.league,
+            sg.sport,
+            sg.league,
             p.year_month_day, 
+            p.team_home,
             p.over
         '''.format(over_value_tuple),
         (sport_value, sport_value, league_value, league_value, country_value, country_value)) #, over_value, over_value
@@ -122,9 +124,9 @@ def show_predicions():
             country_value=country_value
         )
 
-if __name__ == '__main__':
-      app.run(host='0.0.0.0', port=80)
+#if __name__ == '__main__':
+ #     app.run(host='0.0.0.0', port=80)
 
 
-#if __name__ == "__main__":
- #   app.run(debug=True) #ako zovemo program iz komande linije da ukljuci debug mode
+if __name__ == "__main__":
+    app.run(debug=True) #ako zovemo program iz komande linije da ukljuci debug mode

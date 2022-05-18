@@ -28,6 +28,7 @@ def insert_upcoming_games(website_url):
     from selenium.webdriver.support import expected_conditions as EC
     import sqlite3
     import datetime
+    import os
 
     options = Options()
     # options.binary_location = "//usr/bin/chrome.exe"    #chrome binary location specified here
@@ -37,10 +38,10 @@ def insert_upcoming_games(website_url):
     options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-   # options.headless = True
+    options.headless = True
     import sqlite3
 
-    ser = Service("//home/branka/web_sracp2/chromedriver.exe")
+    ser = Service("/" + os.getcwd() + "/chromedriver.exe")
     driver = webdriver.Chrome(options=options, service=ser)
     driver.get(website_url)
 

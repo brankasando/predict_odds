@@ -18,6 +18,7 @@ def insert_new_results(website_url):
     from selenium.webdriver.support import expected_conditions as EC
     import sqlite3
     import datetime
+    import os
 
     options = Options()
     # options.binary_location = "//usr/bin/chrome.exe"    #chrome binary location specified here
@@ -29,7 +30,7 @@ def insert_new_results(website_url):
     options.add_experimental_option('useAutomationExtension', False)
     options.headless = True
 
-    ser = Service("//home/branka/web_sracp2/chromedriver.exe")
+    ser = Service("/"+os.getcwd()+"/chromedriver.exe")
     driver = webdriver.Chrome(options=options, service=ser)
     driver.get(website_url)
 

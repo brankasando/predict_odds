@@ -46,7 +46,7 @@ def show_predicions():
         '''
         select 'All' as country
         union
-        select country league from games 
+        select distinct country from games 
         ''')
     ddl_fetched_country = cur.fetchall()
 
@@ -54,6 +54,25 @@ def show_predicions():
 
     if country_value is None:
         country_value = 'All'
+
+
+    # uzmi over
+    cur.execute(
+        '''
+        select distinct over from predictions where over is not null 
+        ''')
+    ddl_fetched_over = cur.fetchall()
+
+    over_value = request.args.getlist('over')
+    over_value_tuple = tuple(over_value) # za slanje u sqlite query
+
+
+    if len(over_value) == 0:
+        new_list = [x[0] for x in ddl_fetched_over]
+        over_value_tuple = tuple(new_list)
+    elif len(over_value) == 1:
+        over_value_tuple = (over_value[0],1000) # kada je izabrana jedna vrednost, vraca se u formatu (vrednost,) jer je tupple
+        # i potrebna mu je par, zato zadajem lazni par da bi proslo u sql-u
 
 
 
@@ -76,14 +95,15 @@ def show_predicions():
         (g.sport = ? or 'All' = ?) and
         (g.league = ? or 'All' = ?) and
         (g.country = ? or 'All' = ?) and
+        (p.over in {}) and
         odds_last_6 is not null
         order by 
             g.sport,
             g.league,
             p.year_month_day, 
             p.over
-        ''',
-        (sport_value, sport_value, league_value, league_value, country_value, country_value) )
+        '''.format(over_value_tuple),
+        (sport_value, sport_value, league_value, league_value, country_value, country_value)) #, over_value, over_value
     rows_fetched= cur.fetchall()
 
     return render_template \
@@ -92,6 +112,7 @@ def show_predicions():
             ddl_sport=ddl_fetched_sport,
             ddl_league=ddl_fetched_league,
             ddl_country=ddl_fetched_country,
+            ddl_over=ddl_fetched_over,
             rows=rows_fetched,
             sport_value=sport_value,
             league_value = league_value,

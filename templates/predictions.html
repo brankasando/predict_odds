@@ -49,6 +49,19 @@
                     </select>
                 </div>
 
+
+                <div class="col">
+                    <label class="form-label select-label">Choose number of golas:</label>
+                    <select name="over" id="over" class="form-control" multiple>
+                        {% for item in ddl_over %}
+                        <option value={{ item[0] }}>{{ item[0] }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+
+
                 <div class="col">
                     <label class="text-white">Choose filter</label>
                     <br>

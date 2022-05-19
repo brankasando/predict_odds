@@ -14,9 +14,8 @@ cur.execute('''CREATE TABLE scheduled_games
                team text not null,
                is_home bit not null,
                is_current bit not null,
-               created_at timestamp not null,
+               created_at timestamp not null
 
-               constraint pk_scheduled_games primary key (id, is_home)
               )''')
 
 #sqlite allows primary key column to contain NULL values
@@ -68,9 +67,7 @@ cur.execute('''CREATE TABLE predictions
                avg_goal_team_away float not null, 
                avg_goal float not null, 
                is_current bit not null,
-               created_at timestamp not null,
-
-               constraint fk_predictions_game_id foreign key (game_id) references games (id)
+               created_at timestamp not null
               )''')
 
 

@@ -117,7 +117,7 @@ def insert_upcoming_games(website_url):
 
     try:
 
-        cur.execute("update scheduled_games set is_current = 0 where league = ? or year_month_date  <  cast(strftime('%Y%m%d', 'now') as int)"
+        cur.execute("update scheduled_games set is_current = 0 where league = ? or year_month_day <  cast(strftime('%Y%m%d', 'now') as int)"
                     , (website_url_elements[5],))
 
         cur.executemany('''

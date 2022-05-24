@@ -86,7 +86,7 @@ try:
     ),
     
     over_2_5 as (
-    select
+    selectn
         team,
         '2.5' as over,
         sum(case when goals_all_per_game > 2.5 then 1 else 0 end)                        as nb_games_over_all,
@@ -247,33 +247,33 @@ try:
         max(case when is_home = 0 then team end) as team_away, 
     
         /*100/((sum(1.00000*nb_games_over_all/nb_games_all) +
-        sum(iif(is_home = 1, 1.00000*nb_games_over_home/nb_games_home,0)) +
-        sum(iif(is_home = 0, 1.00000*nb_games_over_away/nb_games_away,0)) + 
+        sum(case when is_home = 1 then 1.00000*nb_games_over_home/nb_games_home  else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_games_over_away/nb_games_away else 0 end) + 
         sum(1.00000*nb_games_over_all_last_5/5))*100/6) as odds_last_5,*/
     
         100/((sum(1.00000*nb_games_over_all/nb_games_all) +
-        sum(iif(is_home = 1, 1.00000*nb_games_over_home/nb_games_home,0)) +
-        sum(iif(is_home = 0, 1.00000*nb_games_over_away/nb_games_away,0)) + 
+        sum(case when is_home = 1 then 1.00000*nb_games_over_home/nb_games_home else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_games_over_away/nb_games_away else 0 end) + 
         sum(1.00000*nb_games_over_all_last_6/6))*100/6) as odds_last_6,
     
-        (sum(iif(is_home = 1, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_home_plus/nb_games_home, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_home_minus/nb_games_home, 0)))/4 as avg_goal_team_home,
+        (sum(case when is_home = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_home_plus/nb_games_home else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_home_minus/nb_games_home else 0 end))/4 as avg_goal_team_home,
     
-        (sum(iif(is_home = 0, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_away_plus/nb_games_away, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_away_minus/nb_games_away, 0)))/4 as avg_goal_team_away,
+        (sum(case when is_home = 0 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end))/4 as avg_goal_team_away,
     
-        (sum(iif(is_home = 1, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_home_plus/nb_games_home, 0)) +
-        sum(iif(is_home = 1, 1.00000*nb_goals_home_minus/nb_games_home, 0)) + 
-        sum(iif(is_home = 0, 1.00000*nb_goals_all_plus/nb_games_all, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_all_minus/nb_games_all, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_away_plus/nb_games_away, 0)) +
-        sum(iif(is_home = 0, 1.00000*nb_goals_away_minus/nb_games_away, 0)))/8 as avg_goal,
+        (sum(case when is_home = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end)  +
+        sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_home_plus/nb_games_home else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_home_minus/nb_games_home else 0 end) + 
+        sum(case when is_home = 0 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end))/8 as avg_goal,
         1 as is_current, 
         datetime('now','localtime') as created_at
     from

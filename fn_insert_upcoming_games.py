@@ -43,7 +43,7 @@ def insert_upcoming_games(website_url):
     options.headless = True
     import sqlite3
 
-    ser = Service("/" + os.getcwd() + "/chromedriver.exe")
+    ser = Service("/" + ce.path_to_db + "/chromedriver.exe")
     driver = webdriver.Chrome(options=options, service=ser)
     driver.get(website_url)
 

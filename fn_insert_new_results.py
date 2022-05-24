@@ -31,7 +31,7 @@ def insert_new_results(website_url):
     options.add_experimental_option('useAutomationExtension', False)
     options.headless = True
 
-    ser = Service("/"+os.getcwd()+"/chromedriver.exe")
+    ser = Service("/" + ce.path_to_db + "/chromedriver.exe")
     driver = webdriver.Chrome(options=options, service=ser)
     driver.get(website_url)
 

@@ -19,6 +19,7 @@ def insert_new_results(website_url):
     import sqlite3
     import datetime
     import os
+    import config_environment as ce
 
     options = Options()
     # options.binary_location = "//usr/bin/chrome.exe"    #chrome binary location specified here
@@ -50,7 +51,7 @@ def insert_new_results(website_url):
         if id is not None and id[0] == 'g':
             ids.append(id)
 
-    con = sqlite3.connect('bets.db')
+    con = sqlite3.connect(ce.path_to_db + 'bets.db')
     cur = con.cursor()
 
     # sqlite allows primary key column to contain NULL values

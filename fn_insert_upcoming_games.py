@@ -29,6 +29,7 @@ def insert_upcoming_games(website_url):
     import sqlite3
     import datetime
     import os
+    import config_environment as ce
 
     options = Options()
     # options.binary_location = "//usr/bin/chrome.exe"    #chrome binary location specified here
@@ -108,7 +109,7 @@ def insert_upcoming_games(website_url):
     # print(results_home_list)
     # print(results_away_list)
 
-    con = sqlite3.connect('bets.db')
+    con = sqlite3.connect(ce.path_to_db + 'bets.db')
     cur = con.cursor()
 
     try:

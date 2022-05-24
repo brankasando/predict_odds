@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request #iz flask biblioteke importujemo flask objekat
 import sqlite3
+import config_environment as ce
 
 app = Flask(__name__) #zovemo flask konsturktor, ovo __name__ referencuje ovaj fajl
 
@@ -129,4 +130,4 @@ def show_predicions():
 
 
 if __name__ == "__main__":
-    app.run(debug=True) #ako zovemo program iz komande linije da ukljuci debug mode
+    app.run(host=ce.host, port=ce.port) #ako zovemo program iz komande linije da ukljuci debug mode

@@ -1,8 +1,9 @@
 import sqlite3
 import datetime
 import pandas as pd
+import config_environment as ce
 
-con = sqlite3.connect('bets.db')
+con = sqlite3.connect(ce.path_to_db + 'bets.db')
 cur = con.cursor()
 
 try:
@@ -86,7 +87,7 @@ try:
     ),
     
     over_2_5 as (
-    selectn
+    select
         team,
         '2.5' as over,
         sum(case when goals_all_per_game > 2.5 then 1 else 0 end)                        as nb_games_over_all,

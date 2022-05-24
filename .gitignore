@@ -1,2 +1,5 @@
 bin/
 lib/
+/bets.db
+test.py
+config_environment.py

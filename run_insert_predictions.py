@@ -2,6 +2,9 @@ import sqlite3
 import datetime
 import pandas as pd
 import config_environment as ce
+import os
+
+os.chmod(ce.path_to_db + 'bets.db', 0o777)
 
 con = sqlite3.connect(ce.path_to_db + 'bets.db')
 cur = con.cursor()

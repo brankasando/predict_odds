@@ -21,7 +21,8 @@ def show_predicions():
         '''
         select 'All' as sport
         union
-        select distinct sport from games 
+        select distinct sport from scheduled_games 
+        where is_current = 1 
         ''')
     ddl_fetched_sport = cur.fetchall()
 
@@ -36,7 +37,8 @@ def show_predicions():
         '''
         select 'All' as league
         union
-        select distinct league from games 
+        select distinct league from scheduled_games 
+        where is_current = 1 
         ''')
     ddl_fetched_league = cur.fetchall()
 
@@ -50,7 +52,8 @@ def show_predicions():
         '''
         select 'All' as country
         union
-        select distinct country from games 
+        select distinct country from scheduled_games 
+        where is_current = 1 
         ''')
     ddl_fetched_country = cur.fetchall()
 

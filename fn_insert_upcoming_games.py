@@ -28,7 +28,10 @@ def insert_upcoming_games(website_url):
     from selenium.webdriver.support import expected_conditions as EC
     import sqlite3
     import datetime
+
     import os
+    os.chmod("bets.db", 0o777)
+
     import config_environment as ce
 
     options = Options()
@@ -109,12 +112,14 @@ def insert_upcoming_games(website_url):
     # print(results_home_list)
     # print(results_away_list)
 
+    os.chmod(ce.path_to_db + 'bets.db', 0o777)
     con = sqlite3.connect(ce.path_to_db + 'bets.db')
     cur = con.cursor()
 
     try:
 
-        cur.execute("update scheduled_games set is_current = 0")
+        cur.execute("update scheduled_games set is_current = 0 where league = ? or year_month_date  <  cast(strftime('%Y%m%d', 'now') as int)"
+                    , (website_url_elements[5],))
 
         cur.executemany('''
         INSERT INTO scheduled_games (

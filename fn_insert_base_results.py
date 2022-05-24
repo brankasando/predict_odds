@@ -14,7 +14,10 @@ def insert_base_results(website_url):
     from selenium.webdriver.support import expected_conditions as EC
     import sqlite3
     import datetime
+
     import os
+    os.chmod("bets.db", 0o777)
+
     import config_environment as ce
 
     options = Options()
@@ -25,7 +28,7 @@ def insert_base_results(website_url):
     options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-    # options.headless = True
+    options.headless = ce.headless
 
     ser = Service("/" + os.getcwd() + "/chromedriver.exe")
     driver = webdriver.Chrome(options=options, service=ser)
@@ -36,9 +39,9 @@ def insert_base_results(website_url):
     # mainWindowHandle = driver.getWindowHandle()
     # mainWindowHandle = driver.window_handles
 
-    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
-    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
-    WebDriverWait(driver, 50).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
+    #WebDriverWait(driver, 50).until(EC.element_to_be_clickable((By.LINK_TEXT, "Prikaži još mečeva"))).click()
 
 
     soup = BeautifulSoup(driver.page_source, "html")
@@ -53,6 +56,7 @@ def insert_base_results(website_url):
         if id is not None and id[0] == 'g':
             ids.append(id)
 
+    os.chmod(ce.path_to_db + 'bets.db', 0o777)
     con = sqlite3.connect(ce.path_to_db + 'bets.db')
     cur = con.cursor()
 

@@ -4,3 +4,4 @@ lib/
 test.py
 bets.db
 config_environment.py
+__pycache__

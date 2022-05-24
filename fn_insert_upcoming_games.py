@@ -30,8 +30,6 @@ def insert_upcoming_games(website_url):
     import datetime
 
     import os
-    os.chmod("bets.db", 0o777)
-
     import config_environment as ce
 
     options = Options()
@@ -112,8 +110,9 @@ def insert_upcoming_games(website_url):
     # print(results_home_list)
     # print(results_away_list)
 
-    os.chmod(ce.path_to_db + 'bets.db', 0o777)
+
     con = sqlite3.connect(ce.path_to_db + 'bets.db')
+    os.chmod(ce.path_to_db + 'bets.db', 0o777)
     cur = con.cursor()
 
     try:

@@ -51,8 +51,9 @@ def insert_new_results(website_url):
         if id is not None and id[0] == 'g':
             ids.append(id)
 
-    os.chmod(ce.path_to_db + 'bets.db', 0o777)
+
     con = sqlite3.connect(ce.path_to_db + 'bets.db')
+    os.chmod(ce.path_to_db + 'bets.db', 0o777)
     cur = con.cursor()
 
     # sqlite allows primary key column to contain NULL values

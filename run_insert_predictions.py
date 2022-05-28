@@ -55,9 +55,9 @@ try:
         sum(case when is_home = 1 then goals_all_per_game else 0 end) - sum(case when is_home = 1 then nb_goals_fixed else 0 end)   as nb_goals_home_minus,/* how many goals team receives as host*/
     
         sum(case when is_home = 0 then nb_goals_fixed else 0 end)                                                                 as nb_goals_away_plus, /* how many goals team gives as away*/
-        sum(case when is_home = 0 then goals_all_per_game else 0 end) - sum(case when is_home = 0 then nb_goals_fixed else 0 end) as nb_goals_away_minus /* how many goals team receives as away*/
+        sum(case when is_home = 0 then goals_all_per_game else 0 end) - sum(case when is_home = 0 then nb_goals_fixed else 0 end) as nb_goals_away_minus, /* how many goals team receives as away*/
         sum(case when rn <=6 then nb_goals_fixed else 0 end)       as nb_goals_all_plus_last_6, /*how many goals team gives overall in last 6 games*/
-        sum(case when rn <=6 then goals_per_game else 0 end) - sum(case when rn <=6 then nb_goals_fixed else 0 end) as nb_goals_all_minus_last_6  /*how many goals team receives overall in last 6 games*/
+        sum(case when rn <=6 then goals_all_per_game else 0 end) - sum(case when rn <=6 then nb_goals_fixed else 0 end) as nb_goals_all_minus_last_6  /*how many goals team receives overall in last 6 games*/
     from 
     fixed_goal
     group by team
@@ -270,13 +270,13 @@ try:
         sum(case when is_home = 1 then 1.00000*nb_goals_home_minus/nb_games_home else 0 end) +
         sum(case when is_home = 1 then 1.00000*nb_goals_all_minus_last_6/6 else 0 end))/3 as avg_goal_team_home_minus,
     
-        (sum(case when is_away = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
-        sum(case when is_away = 1 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
-        sum(case when is_away = 1 then 1.00000*nb_goals_all_plus_last_6/6 else 0 end))/3 as avg_goal_team_away_plus,
+        (sum(case when is_home = 0 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_all_plus_last_6/6 else 0 end))/3 as avg_goal_team_away_plus,
     
-        (sum(case when is_away = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
-        sum(case when is_away = 1 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end) +
-        sum(case when is_away = 1 then 1.00000*nb_goals_all_minus_last_6/6 else 0 end))/3 as avg_goal_team_away_minus,
+        (sum(case when is_home = 0 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end) +
+        sum(case when is_home = 0 then 1.00000*nb_goals_all_minus_last_6/6 else 0 end))/3 as avg_goal_team_away_minus,
     
         (sum(case when is_home = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end)  +
         sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +

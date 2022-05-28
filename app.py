@@ -94,7 +94,10 @@ def show_predicions():
             p.team_home as team_home,
             p.team_away as team_away,
             round(p.odds_last_6, 5) as odds_last_6,
-            round(p.avg_goal, 5) as avg_goal   
+            round(p.avg_goal_team_home_plus, 5) as avg_goal_team_home_plus,
+            round(p.avg_goal_team_home_minus, 5) as avg_goal_team_home_minus,
+            round(p.avg_goal_team_away_plus, 5) as avg_goal_team_away_plus,
+            round(p.avg_goal_team_away_minus, 5) as avg_goal_team_away_minus 
         from 
         scheduled_games sg
         inner join predictions p on p.game_id = sg.id and sg.is_current = 1

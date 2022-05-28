@@ -56,6 +56,8 @@ try:
     
         sum(case when is_home = 0 then nb_goals_fixed else 0 end)                                                                 as nb_goals_away_plus, /* how many goals team gives as away*/
         sum(case when is_home = 0 then goals_all_per_game else 0 end) - sum(case when is_home = 0 then nb_goals_fixed else 0 end) as nb_goals_away_minus /* how many goals team receives as away*/
+        sum(case when rn <=6 then nb_goals_fixed else 0 end)       as nb_goals_all_plus_last_6, /*how many goals team gives overall in last 6 games*/
+        sum(case when rn <=6 then goals_per_game else 0 end) - sum(case when rn <=6 then nb_goals_fixed else 0 end) as nb_goals_all_minus_last_6  /*how many goals team receives overall in last 6 games*/
     from 
     fixed_goal
     group by team
@@ -228,6 +230,8 @@ try:
         gpt.nb_goals_home_minus,
         gpt.nb_goals_away_plus,
         gpt.nb_goals_away_minus,
+        gpt.nb_goals_all_plus_last_6, 
+        gpt.nb_goals_all_minus_last_6,
         uo.over,
         uo.nb_games_over_all,
         uo.nb_games_over_home,
@@ -240,9 +244,7 @@ try:
     inner join union_over uo on uo.team = sg.team
     where sg.is_current = 1
     )    
-   /* insert into predictions
-    (game_id, year_month_day, over, team_home, team_away, odds_last_6, avg_goal_team_home, avg_goal_team_away, avg_goal,
-     is_current, created_at)*/
+
     select
         id as game_id,
         year_month_day, 
@@ -261,14 +263,20 @@ try:
         sum(1.00000*nb_games_over_all_last_6/6))*100/6) as odds_last_6,
     
         (sum(case when is_home = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
-        sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
         sum(case when is_home = 1 then 1.00000*nb_goals_home_plus/nb_games_home else 0 end) +
-        sum(case when is_home = 1 then 1.00000*nb_goals_home_minus/nb_games_home else 0 end))/4 as avg_goal_team_home,
+        sum(case when is_home = 1 then 1.00000*nb_goals_all_plus_last_6/6 else 0 end))/3 as avg_goal_team_home_plus,
     
-        (sum(case when is_home = 0 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
-        sum(case when is_home = 0 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
-        sum(case when is_home = 0 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
-        sum(case when is_home = 0 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end))/4 as avg_goal_team_away,
+        (sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_home_minus/nb_games_home else 0 end) +
+        sum(case when is_home = 1 then 1.00000*nb_goals_all_minus_last_6/6 else 0 end))/3 as avg_goal_team_home_minus,
+    
+        (sum(case when is_away = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end) +
+        sum(case when is_away = 1 then 1.00000*nb_goals_away_plus/nb_games_away else 0 end) +
+        sum(case when is_away = 1 then 1.00000*nb_goals_all_plus_last_6/6 else 0 end))/3 as avg_goal_team_away_plus,
+    
+        (sum(case when is_away = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
+        sum(case when is_away = 1 then 1.00000*nb_goals_away_minus/nb_games_away else 0 end) +
+        sum(case when is_away = 1 then 1.00000*nb_goals_all_minus_last_6/6 else 0 end))/3 as avg_goal_team_away_minus,
     
         (sum(case when is_home = 1 then 1.00000*nb_goals_all_plus/nb_games_all else 0 end)  +
         sum(case when is_home = 1 then 1.00000*nb_goals_all_minus/nb_games_all else 0 end) +
@@ -293,10 +301,11 @@ try:
 
     cur.executemany('''
     insert into predictions
-    (game_id, year_month_day, over, team_home, team_away, odds_last_6, avg_goal_team_home, avg_goal_team_away, avg_goal,
-     is_current, created_at)
+    (game_id, year_month_day, over, team_home, team_away, odds_last_6, 
+     avg_goal_team_home_plus, avg_goal_team_home_minus, avg_goal_team_away_plus, avg_goal_team_away_minus,
+     avg_goal, is_current, created_at)
      VALUES
-     (?,?,?,?,?,?,?,?,?,?,?)
+     (?,?,?,?,?,?,?,?,?,?,?,?,?)
      ''',
      records)
 

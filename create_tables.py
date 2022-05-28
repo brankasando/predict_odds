@@ -63,13 +63,19 @@ cur.execute('''CREATE TABLE predictions
                team_home text not null,
                team_away text not null,
                odds_last_6 float, 
-               avg_goal_team_home float not null, 
-               avg_goal_team_away float not null, 
-               avg_goal float not null, 
+
+               avg_goal_team_home_plus float, 
+               avg_goal_team_home_minus float, 
+               avg_goal_team_away_plus float, 
+               avg_goal_team_away_minus float, 
+
+               avg_goal float float, 
+
                is_current bit not null,
-               created_at timestamp not null
+               created_at timestamp not null   
               )''')
 
 
 con.commit()
 con.close()
+

@@ -1,36 +1,28 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>predictions</title>
 {% endblock %}
 
 {% block body %}
 
-
 <body style="position:relative;">
 <h1 style="text-align:center;">BETTING ODDS</h1>
 
-<style>
-#intro
- {
-    height : 100px;
-    border : 1px solid black;
-    display : flex;
-    align-items : center;
-    justify-content : center;
-}
-
-</style>
+<!--intro syle was here-->
 
     <div id ="intro">
         <span>
-            In table below, column ODDS (with form of last 6) represents odds calculated by our own formula, for
+            In table below, column ODDS (with form for of last 6) represent odds calculated by our own formula, for
             each number of goals (column OVER). <br>
-            Data is obtained by scraping website <a target="_blank" href="https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati">https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati</a>.<br>
-            If odds calculated using our formula is lower than odds calcualted by betting company then a person should bet
+            Data is obtain by scraping website <a target="_blank" href="https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati">https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati</a><br>
+            If odds calculated using our formula is lower than odd calcualted by betting company then a person should bet
             on that result.
         </span>
+
     </div>
+</body>
+
+
 
 <div class="container">
 
@@ -91,7 +83,7 @@
                 <div class="col">
                     <label class="text-white">Choose filter</label>
                     <br>
-                    <button type="submit" class="btn mt-1" style="background-color:#BBAAB8;color:white;">FILTER</button>
+                    <button type="submit" class="btn mt-1 px-5" style="background-color: #83cbb0;color:white;">FILTER</button>
                 </div>
 
             </div>
@@ -100,35 +92,10 @@
 
     </form>
 
-
-    <style>
-#predictions_table {
-  font-size: 14px;
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#predictions_table td, #predictions_table th {
-  border: 1px solid #ddd;
-  padding: 6px;
-}
-
-#predictions_table tr:nth-child(even){background-color: #f2f2f2;}
-
-#predictions_table tr:hover {background-color: #ddd;}
-
-#predictions_table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: #6F6869;
-  color: white;
-}
-</style>
+<!--predictions style was here-->
     <br>
-    <h3>Predictions:</h3>
-    <table class="table text-center"; id = "predictions_table" border="1" class="dataframe">
+    <h3>Predictions</h3>
+    <table class="table text-center text-white"; id = "predictions_table" border="1" class="dataframe">
         <thead style="font-size:13px";>
         <tr>
             <th>SPORT</th>

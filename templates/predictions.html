@@ -6,6 +6,32 @@
 
 {% block body %}
 
+
+<body style="position:relative;">
+<h1 style="text-align:center;">BETTING ODDS</h1>
+
+<style>
+#intro
+ {
+    height : 100px;
+    border : 1px solid black;
+    display : flex;
+    align-items : center;
+    justify-content : center;
+}
+
+</style>
+
+    <div id ="intro">
+        <span>
+            In table below, column ODDS (with form of last 6) represents odds calculated by our own formula, for
+            each number of goals (column OVER). <br>
+            Data is obtained by scraping website <a target="_blank" href="https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati">https://www.rezultati.com/nogomet/spanjolska/laliga/rezultati</a>.<br>
+            If odds calculated using our formula is lower than odds calcualted by betting company then a person should bet
+            on that result.
+        </span>
+    </div>
+
 <div class="container">
 
     <form method="GET" action="/predictions">

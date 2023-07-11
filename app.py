@@ -21,7 +21,7 @@ def show_predicions():
         '''
         select 'All' as sport
         union
-        select distinct sport from scheduled_games 
+        select distinct 'Football' from scheduled_games 
         where is_current = 1 
         ''')
     ddl_fetched_sport = cur.fetchall()
@@ -52,7 +52,13 @@ def show_predicions():
         '''
         select 'All' as country
         union
-        select distinct country from scheduled_games 
+        select distinct
+        case 
+		when country = 'spanjolska' then 'Spain'
+		when country = 'italija' then 'Italy'
+		when country = 'engleska' then 'England'
+	end as country 
+	from scheduled_games 
         where is_current = 1 
         ''')
     ddl_fetched_country = cur.fetchall()
@@ -86,9 +92,13 @@ def show_predicions():
     cur.execute(
         '''
         select distinct
-            sg.sport as sport, 
+            case when sg.sport = 'nogomet' then 'Football' end  as sport, 
             sg.league as league,
-            sg.country as country,
+	    case 
+            	when sg.country = 'spanjolska' then 'Spain'
+		when sg.country = 'italija' then 'Italy'
+		when sg.country = 'engleska' then 'England'
+	    end as country,
             p.year_month_day as year_month_day, 
             p.over as over, 
             p.team_home as team_home,

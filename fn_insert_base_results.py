@@ -22,8 +22,9 @@ def insert_base_results(website_url):
     options = Options()
     # options.binary_location = "//usr/bin/chrome.exe"    #chrome binary location specified here
     # options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--start-maximized")  # open Browser in maximized mode
-    options.add_argument("--no-sandbox")  # bypass OS security model
     options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)

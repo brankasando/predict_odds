@@ -68,7 +68,6 @@ def show_predicions():
     if country_value is None:
         country_value = 'All'
 
-
     # uzmi over
     cur.execute(
         '''
@@ -86,7 +85,6 @@ def show_predicions():
     elif len(over_value) == 1:
         over_value_tuple = (over_value[0],1000) # kada je izabrana jedna vrednost, vraca se u formatu (vrednost,) jer je tupple
         # i potrebna mu je par, zato zadajem lazni par da bi proslo u sql-u
-
 
 
     cur.execute(
@@ -113,9 +111,9 @@ def show_predicions():
         inner join predictions p on p.game_id = sg.id and sg.is_current = 1
         where 
         p.is_current = 1 and
-        (sg.sport = ? or 'All' = ?) and
+        ('Football' = ? or 'All' = ?) and
         (sg.league = ? or 'All' = ?) and
-        (sg.country = ? or 'All' = ?) and
+        ('Italy' = ? or 'All' = ?) and
         (p.over in {}) and
         p.odds_last_6 is not null
         order by 
